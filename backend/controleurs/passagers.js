@@ -58,35 +58,39 @@ exports.login = (req,res,next) =>{
                     ville : user.ville
                 }
                 const token = jwt.sign(
-                    user.toJSON(),
+                    {userId:user._id},
                     process.env.TOKEN_SECRET,
                     {expiresIn:'3h'}
                 )
+                userinfos.token = token
                 res.status(200).json({
-                    userinfos:userinfos,
-                    token : token
+                    nom : user.nom,
+                    email: user.email, 
+                    telephone: user.telephone,
+                    photo : user.photo,
+                    statut: user.statut,
+                    id : user._id,
+                    ville : user.ville,
+                    token
                 })
             })
            
-            // if(user.password !== req.body.password){
-            //     res.status(401).json({erreur:'mot de passe ou adresse mail incorrect'})
-            // }else{
-            //     const userinfos ={
-            //         username: user.nom,
-            //         useremail: user.email, 
-            //     }
-            //     const token = jwt.sign(
-            //         user.toJSON(),
-            //         process.env.TOKEN_SECRET,
-            //         {expiresIn:'3h'}
-            //     )
-            //     res.status(200).json({
-            //         token:token,
-            //         user:userinfos
-                    
-            //     })
-            // }
         }
     })
 
+}
+
+exports.verify_token = (req,res,next) => {
+    if (req.headers.authorization) {
+        const token = req.headers.authorization.split(" ")[1];
+    
+        // Vérifier si le token est valide
+        try {
+          jwt.verify(token, process.env.TOKEN_SECRET);
+          res.status(201).json({ message: "token valide" });
+        } catch (error) {
+          res.status(400).json(error);
+        }
+      }
+    
 }
