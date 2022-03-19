@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 
 
 const passagersRoutes = require('./routes/Passagers')
+const conducteursRoutes = require('./routes/conducteurs_route')
 
 
 
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 
 app.use(cors());
 app.use('/api/passagers', passagersRoutes);
+app.use('/api/conducteurs', conducteursRoutes);
 
 
 
